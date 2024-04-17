@@ -18,6 +18,7 @@ import { Router } from '@angular/router';
 import { ProductService } from '../../../core/services/product.service';
 import { BlockUIModule } from 'primeng/blockui';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { ProductToOrderDto } from '../../../core/dtos/ProductToOrderDto.dto';
 
 @Component({
   selector: 'app-order',
@@ -45,7 +46,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 export class OrderComponent extends BaseComponent implements OnInit,AfterViewInit {
   public inforShipForm: FormGroup;
   public productToOrder!: ProductsInCartDto[];
-  public productOrder: ProductToCartDto[] = [];
+  public productOrder: ProductToOrderDto[] = [];
   public totalCost: number = 0;
   private productOrderLocalStorage: ProductsInCartDto[] = [];
   public blockedUi: boolean = false;
@@ -115,7 +116,8 @@ export class OrderComponent extends BaseComponent implements OnInit,AfterViewIni
   order(){
     if (this.inforShipForm.invalid){
       this.toastService.fail("Vui lòng nhập đầy đủ thông tin giao hàng");
-    } else {
+    }
+    else {
       this.blockUi();
       this.orderService.postOrder({
         fullname: this.inforShipForm.value.fullName,

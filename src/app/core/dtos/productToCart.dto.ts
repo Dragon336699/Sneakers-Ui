@@ -1,5 +1,5 @@
 export interface ProductToCartDto {
     product_id : number,
-    number_of_products : number,
+    quantity : number,
     size : number
 }

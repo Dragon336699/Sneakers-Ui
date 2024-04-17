@@ -94,7 +94,7 @@ export class DetailProductComponent extends BaseComponent implements OnInit {
   addToCart(){
     this.productService.addProductToCart({
       product_id: Number(this.id),
-      number_of_products: this.quantity,
+      quantity: this.quantity,
       size:  this.size
     }).pipe(
       tap(() => {

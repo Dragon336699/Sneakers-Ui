@@ -1,3 +1,4 @@
+import { ProductToOrderDto } from "./ProductToOrderDto.dto";
 import { ProductToCartDto } from "./productToCart.dto";
 
 export interface OrderDto {
@@ -9,5 +10,5 @@ export interface OrderDto {
     shipping_method: string,
     payment_method: string,
     total_money: number,
-    orders_details: ProductToCartDto[];
+    orders_details: ProductToOrderDto[];
 }

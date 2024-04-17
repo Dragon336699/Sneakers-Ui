@@ -101,7 +101,7 @@ constructor(
               product.quantity = productInfo.quantity;
               updateProduct = {
                 product_id : product.products.id,
-                number_of_products : product.quantity,
+                quantity : product.quantity,
                 size : product.size
               }
               this.resetTotalCost();
