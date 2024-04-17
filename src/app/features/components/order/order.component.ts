@@ -90,7 +90,7 @@ export class OrderComponent extends BaseComponent implements OnInit,AfterViewIni
     this.productToOrder.forEach((item) => {
       this.productOrder.push({
         product_id: item.products.id,
-        quantity: item.quantity,
+        number_of_products: item.quantity,
         size: item.size
       })
     })
@@ -125,7 +125,7 @@ export class OrderComponent extends BaseComponent implements OnInit,AfterViewIni
         note: this.inforShipForm.value.note,
         shipping_method: this.methodShippingValue.name,
         payment_method: this.selectedPayMethod.name,
-        cart_items: this.productOrder,
+        orders_details: this.productOrder,
         total_money: this.totalCost
       }).pipe(
         tap((orderInfor: any) => {

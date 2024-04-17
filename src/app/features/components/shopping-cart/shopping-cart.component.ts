@@ -76,10 +76,9 @@ constructor(
       switchMap(() => {
         return this.productService.getProductFromCart().pipe(
           filter((product : ProductFromCartDto) => !!product),
-          tap((product : ProductFromCartDto) => {
+          tap((product : ProductFromCartDto) => {            
             this.producsInCart = product.carts;
           }),
-          takeUntil(this.destroyed$),
           catchError((err) => of(err))
         )
       }),
@@ -102,7 +101,7 @@ constructor(
               product.quantity = productInfo.quantity;
               updateProduct = {
                 product_id : product.products.id,
-                quantity : product.quantity,
+                number_of_products : product.quantity,
                 size : product.size
               }
               this.resetTotalCost();

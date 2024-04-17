@@ -86,7 +86,7 @@ export class AppHeaderComponent extends BaseComponent implements AfterViewInit,O
       this.userService.getInforUser(this.token).pipe(
         filter((userInfo) => !!userInfo),
         tap((userInfo) => {
-          this.userName = userInfo.fullname;
+          this.userName = userInfo.fullName;
         }),
         takeUntil(this.destroyed$),
         catchError((err) => of(err))

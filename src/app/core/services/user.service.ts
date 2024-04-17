@@ -21,7 +21,7 @@ export class UserService {
   }
 
   register(registerValue : registerReq){
-    return this.httpClient.post<registerDto>(`${this.apiUrl}users/register`,registerValue);
+    return this.httpClient.post<string>(`${this.apiUrl}users/register`,registerValue);
   }
 
   getInforUser(token : string | null){

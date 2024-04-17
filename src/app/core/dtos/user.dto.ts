@@ -1,5 +1,5 @@
 export interface UserDto {
-    fullname: string,
+    fullName: string,
     phone_number: string,
     address: string,
 }

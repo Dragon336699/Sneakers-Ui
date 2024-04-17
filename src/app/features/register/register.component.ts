@@ -90,7 +90,7 @@ export class RegisterComponent extends BaseComponent implements AfterViewInit {
               this.router.navigateByUrl('/auth-login')
             }),
             catchError((registerError) => {
-              this.toastService.fail(registerError.error.message)
+              this.toastService.fail(registerError.error)
               return of();
             })
           )

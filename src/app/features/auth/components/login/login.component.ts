@@ -70,8 +70,8 @@ export class LoginComponent extends BaseComponent implements AfterViewInit {
       }),
       switchMap(() => {
         return this.userSerivce.login({
-          phone_number : this.loginForm.value.userName,
-          password : this.loginForm.value.password,
+          PhoneNumber : this.loginForm.value.userName,
+          Password : this.loginForm.value.password,
         }).pipe(
           tap((loginVal : loginDetailDto) => {
             this.toastService.success(loginVal.message);
