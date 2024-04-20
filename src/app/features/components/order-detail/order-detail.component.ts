@@ -48,8 +48,6 @@ export class OrderDetailComponent extends BaseComponent implements OnInit {
         return this.orderService.getOrderInfor(parseInt(this.id)).pipe(
           filter((orderInfor: InfoOrderDto) => !!orderInfor),
           tap((orderInfor: InfoOrderDto) => {
-            console.log(orderInfor);
-            
             this.orderInfor = orderInfor;
             this.productOrderd = orderInfor.order_details;
             this.notion = orderInfor.note;
