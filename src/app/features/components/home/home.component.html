@@ -97,12 +97,12 @@
               <div (click)="navigateToDetail(product.id)" class="col-6 col-lg-3">
                 <div class="card border-0">
                   <div class="card-body py-3">
-                    <p-badge [value]="-product.discount + '%'" severity="danger"></p-badge>
+                    <p-badge [value]="-product.sale + '%'" severity="danger"></p-badge>
                     <img [src]="apiImage + product.thumbnail" alt="giaycv" class="img-fluid">
                   </div>
                   <div class="card-footer text-center tw-bold border-0">
                     <p class="lead card-title text-secondary">{{product.name}}</p>
-                    <p class="my-2 text-danger fw-bold" style="font-size: 16px;"><s>{{product.price / (1-product.discount/100) | currency:'VND':'symbol':'1.0-0'}}</s></p>
+                    <p class="my-2 text-danger fw-bold" style="font-size: 16px;"><s>{{product.price / (1-product.sale/100) | currency:'VND':'symbol':'1.0-0'}}</s></p>
                     <p class="my-2 text-danger fw-bold">{{product.price | currency:'VND':'symbol':'1.0-0'}}</p>
                   </div>
                 </div>

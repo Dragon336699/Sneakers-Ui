@@ -9,6 +9,7 @@ import { environment } from '../../../../environments/environment.development';
 import { CurrencyPipe } from '@angular/common';
 import { BadgeModule } from 'primeng/badge';
 import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -42,7 +43,7 @@ export class HomeComponent extends BaseComponent implements OnInit {
         this.productsHighlight = product.products.slice(0, 3);
         this.productNewest  = product.products.slice(0, 4);
         this.productsDiscount = product.products.filter((product) => {
-          return product.discount;
+          return product.sale;
         })
       }),
     ).subscribe();

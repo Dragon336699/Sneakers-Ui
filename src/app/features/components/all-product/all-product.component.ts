@@ -17,6 +17,8 @@ import { environment } from '../../../../environments/environment.development';
 import { BadgeModule } from 'primeng/badge';
 import { CategoriesService } from '../../../core/services/categories.service';
 import { CategoriesDto } from '../../../core/dtos/categories.dto';
+import { UserService } from '../../../core/services/user.service';
+import { UserDto } from '../../../core/dtos/user.dto';
 
 @Component({
   selector: 'app-all-product',
@@ -34,6 +36,8 @@ import { CategoriesDto } from '../../../core/dtos/categories.dto';
   styleUrl: './all-product.component.scss'
 })
 export class AllProductComponent extends BaseComponent implements OnInit, AfterViewInit {
+  private token: string | null = null;
+  public roleId!: number;
   public products: ProductDto[] = [];
   public sortOptions: MenuItem[] = [
     { label: 'Giá từ thấp đến cao', value: 'price' },
@@ -50,7 +54,8 @@ export class AllProductComponent extends BaseComponent implements OnInit, AfterV
     private productService: ProductService,
     private detailProductService: DetailProductService,
     private router: Router,
-    private categoriesService: CategoriesService
+    private categoriesService: CategoriesService,
+    private userService: UserService
   ) {
     super();
   }
@@ -69,6 +74,15 @@ export class AllProductComponent extends BaseComponent implements OnInit, AfterV
   }
 
   ngOnInit(): void {
+    if (this.token != null){
+      this.userService.getInforUser(this.token).pipe(
+        filter((userInfor: UserDto) => !!userInfor),
+        tap((userInfor: UserDto) => {
+          this.roleId = userInfor.role_id;
+        })
+      ).subscribe();
+    }
+
     this.categoriesService.getCategories().pipe(
       tap((categories) => {
         this.categoriesOptions = categories.map((item: CategoriesDto) => {
