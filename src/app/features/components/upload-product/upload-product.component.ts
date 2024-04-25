@@ -100,14 +100,14 @@ export class UploadProductComponent extends BaseComponent implements OnInit {
               this.productForm.reset();
               this.myFiles = [];
             }),
-            catchError((err: {message: string}) => {
-              this.toastService.fail(err.message);
+            catchError((err) => {
+              this.toastService.fail(err.error.message);
               return of(err);
             })
           )
         }),
-        catchError((err: {message: string}) => {
-          this.toastService.fail(err.message);
+        catchError((err) => {
+          this.toastService.fail(err.error.message);
           return of(err);
         })
       ).subscribe();

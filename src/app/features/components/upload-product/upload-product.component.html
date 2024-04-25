@@ -15,7 +15,7 @@
             <label class="font-bold" for="sale">Giảm giá (%)</label>
             <p-inputNumber inputId="sale" formControlName="sale"></p-inputNumber>
           </div>
-          <div class="wrapper">
+          <div class="wrapper dropdown-wrapper">
             <p-dropdown [options]="categoriesOptions" placeholder="Danh mục"
               (onChange)="onCategoryChange($event)"></p-dropdown> 
           </div>

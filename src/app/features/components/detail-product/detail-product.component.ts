@@ -195,7 +195,6 @@ export class DetailProductComponent extends BaseComponent implements OnInit,Afte
             switchMap(() => {
               return this.productService.deleteProduct(this.id).pipe(
                 tap((res: any) => {
-                  console.log(res);
                   this.router.navigate(["/allProduct"]);
                 }),
                 catchError((err) => of(err))
