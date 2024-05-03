@@ -1,4 +1,7 @@
 <div class="app-layout">
+  <p-blockUI [blocked]="blockedUi">
+    <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
+  </p-blockUI>
   <div class="app-header">
     <app-app-header></app-app-header>
     <app-app-navbar></app-app-navbar>

@@ -9,7 +9,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { FormBuilder, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CurrencyPipe } from '@angular/common';
 import { ToastModule } from 'primeng/toast';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { ToastService } from '../../../core/services/toast.service';
 import { DetailProductService } from '../../../core/services/detail-product.service';
 import { CommonService } from '../../../core/services/common.service';
@@ -23,6 +23,9 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { LoadingService } from '../../../core/services/loading.service';
+import { DropdownModule } from 'primeng/dropdown';
+import { CategoriesService } from '../../../core/services/categories.service';
+import { CategoriesDto } from '../../../core/dtos/categories.dto';
 
 
 @Component({
@@ -39,7 +42,8 @@ import { LoadingService } from '../../../core/services/loading.service';
     InputTextareaModule,
     FileUploadModule,
     ButtonModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    DropdownModule
   ],
   providers: [
     MessageService,
@@ -62,7 +66,10 @@ export class DetailProductComponent extends BaseComponent implements OnInit,Afte
   public sizes : number[] = [36,37,38,39,40,41,42,43,44];
   public size : number = this.sizes[0];
   public apiImage: string = environment.apiImage;
-  private myFiles: File[] = [];
+  public myFiles: File[] = [];
+  public categoriesOptions: MenuItem[] = [];
+  private categoryId!: string;
+  public categoryNameOfProduct!: string;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -75,21 +82,26 @@ export class DetailProductComponent extends BaseComponent implements OnInit,Afte
     private commonService: CommonService,
     private userService: UserService,
     private confirmationService: ConfirmationService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private categoriesService: CategoriesService
   ) {
     super();
     if (typeof localStorage != 'undefined'){
       this.token = localStorage.getItem("token");
-      this.roleId = parseInt(localStorage.getItem("roleId") || '0');
+      this.roleId = parseInt(JSON.parse(localStorage.getItem("userInfor") || '{"role_id": "0"}').role_id || '0');
     }
     this.productForm = this.fb.group({
       productName: [, Validators.required],
       description: [, Validators.required],
       price:[, Validators.required],
-      discount: [, Validators.required]
+      sale: [, Validators.required]
     })
   }
   ngAfterViewInit(): void {
+    
+  }
+
+  ngOnInit(): void {
     if (this.token != null){
       this.userService.getInforUser(this.token).pipe(
         filter((userInfo: UserDto) => !!userInfo),
@@ -127,12 +139,20 @@ export class DetailProductComponent extends BaseComponent implements OnInit,Afte
             productName: product.name,
             description: product.description,
             price: product.price,
-            discount: product.sale
+            sale: product.sale
           })
+          this.categoryId = product.category_id.toString();
           this.images = product.product_images;
         }),
         switchMap(() => {
-          return of();
+          return this.categoriesService.getCategoryById(parseInt(this.categoryId)).pipe(
+            tap((category: CategoriesDto) => {
+              this.categoryNameOfProduct = category.name;
+            }),
+            catchError((err) => {
+              return of(err);
+            })
+          );
         }),
         catchError((err) => {
           return of(err);
@@ -149,10 +169,17 @@ export class DetailProductComponent extends BaseComponent implements OnInit,Afte
         }),
       ).subscribe();
     }
-  }
 
-  ngOnInit(): void {
-    
+    this.categoriesService.getCategories().pipe(
+      tap((categories) => {
+        this.categoriesOptions = categories.map((item: CategoriesDto) => {
+          return {
+            label: item.name,
+            value: item.id.toString()
+          }
+        })
+      })
+    ).subscribe()
   }
 
   addToCart(){
@@ -179,7 +206,18 @@ export class DetailProductComponent extends BaseComponent implements OnInit,Afte
   }
 
   onUpload(event: any){
+  this.loadingService.setLoading(true);
+
+  setTimeout(() => {
     this.myFiles = event.files;
+    setTimeout(() => {
+      this.loadingService.setLoading(false);
+    }, 0);
+  }, 2000);
+  }
+
+  onCategoryChange(event: any){
+    this.categoryId = event.value;
   }
 
   confirmDelete() {
@@ -209,5 +247,61 @@ export class DetailProductComponent extends BaseComponent implements OnInit,Afte
         reject: () => {
         }
     });
+  }
+
+  updateProductAdmin(){
+    const formData = new FormData();
+    this.myFiles.forEach(file => {
+      formData.append('files', file, file.name);
+    });
+
+    if (this.productForm.valid && this.myFiles.length > 0 && this.categoryId){
+      this.productService.uploadImageProduct(formData, parseInt(this.id)).pipe(
+        switchMap(() => {
+          return this.productService.updateProduct({
+            name: this.productForm.value.productName,
+            price: this.productForm.value.price,
+            description: this.productForm.value.description,
+            sale: this.productForm.value.sale,
+            category_id: parseInt(this.categoryId)
+          }, parseInt(this.id)).pipe(
+            tap((res: {message: string}) => {
+              this.toastService.success(res.message);
+              this.router.navigate(['/allProduct']);
+            }),
+            catchError((err) => {
+              this.toastService.fail(err.error.message);
+              return of(err);
+            })
+          );
+        }),
+        catchError((err) => {
+          this.toastService.fail(err.error.message);
+          return of(err);
+        })
+      ).subscribe();
+    } else if (this.productForm.valid && this.myFiles.length == 0 && this.categoryId) {
+      this.productService.updateProduct({
+        name: this.productForm.value.productName,
+        price: this.productForm.value.price,
+        description: this.productForm.value.description,
+        sale: this.productForm.value.sale,
+        category_id: parseInt(this.categoryId)
+      }, parseInt(this.id)).pipe(
+        tap((res: {message: string}) => {
+          this.toastService.success(res.message);
+          setTimeout(() => {
+            this.router.navigate(['/allProduct']);
+          }, 1000)
+        }),
+        catchError((err) => {
+          this.toastService.fail(err.error.message);
+          return of(err);
+        })
+      ).subscribe();
+    } else {
+      this.toastService.fail("Vui lòng nhập đầy đủ thông tin muốn cập nhật");
+    }
+
   }
 }

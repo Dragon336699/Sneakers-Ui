@@ -85,7 +85,7 @@ export class LoginComponent extends BaseComponent implements AfterViewInit {
           switchMap(() => {
             return this.userSerivce.getInforUser(this.token).pipe(
               tap((userInfor: UserDto) => {
-                localStorage.setItem("roleId",userInfor.role_id.toString());
+                localStorage.setItem("userInfor", JSON.stringify(userInfor));
               })
             );
           }),

@@ -24,6 +24,10 @@ export class CategoriesService {
     return this.httpClient.get<CategoriesDto[]>(`${this.apiUrl}categories`);
   }
 
+  getCategoryById(id: number){
+    return this.httpClient.get<CategoriesDto>(`${this.apiUrl}categories/${id}`);
+  }
+
   getAllProductByCategory(id: number){
     return this.httpClient.get<AllProductDto>(`${this.apiUrl}products/category/${id}`);
   }

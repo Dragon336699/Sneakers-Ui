@@ -72,7 +72,7 @@ export class AppHeaderComponent extends BaseComponent implements AfterViewInit,O
     super();
     if (typeof localStorage !== 'undefined') {
       this.token = localStorage.getItem('token');
-      this.roleId = parseInt(localStorage.getItem("roleId") || '0');
+      this.roleId = parseInt(JSON.parse(localStorage.getItem("userInfor") || '{"role_id": "0"}').role_id || '0');
     }
   }
 
@@ -132,9 +132,11 @@ export class AppHeaderComponent extends BaseComponent implements AfterViewInit,O
   
   signOut(){
     localStorage.removeItem("token");
-    localStorage.removeItem("roleId");
+    localStorage.removeItem("userInfor");
     localStorage.removeItem("productOrder");
-    window.location.reload();
+    window.location.href = "/Home";
+    // window.location.reload();
+    // this.router.navigate(['/Home']);
   }
 
   sendContentSearch(){

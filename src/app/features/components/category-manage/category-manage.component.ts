@@ -73,7 +73,7 @@ export class CategoryManageComponent extends BaseComponent implements OnInit{
   
   confirmDelete(id: number) {
     this.confirmationService.confirm({
-        message: 'Bạn chắc chắn muốn bỏ danh mục này?',
+        message: 'Xóa danh mục đồng nghĩa với xóa tất cả sản phẩm của danh mục. Bạn chắc chắn muốn bỏ danh mục này?',
         header: 'Xác nhận',
         icon: 'pi pi-exclamation-triangle',
         acceptIcon:"none",
@@ -96,6 +96,13 @@ export class CategoryManageComponent extends BaseComponent implements OnInit{
   }
 
   updateCategory(id: number, name: string){
+    let categoryExist = this.categoriesOptions.find(res => res.name === name);
+
+    if (categoryExist){
+      this.toastService.fail("Danh mục đã tồn tại");
+      return;
+    }
+
     this.categoriesService.updateCategory({name: name}, id).pipe(
       tap((res: {categories: CategoriesDto[],message: string}) => {
         this.categoriesOptions = res.categories;

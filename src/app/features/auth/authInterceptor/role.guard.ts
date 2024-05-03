@@ -16,7 +16,7 @@ export class RoleGuard implements CanActivate {
 ) {
     if (typeof localStorage !== 'undefined') {
         this.token = localStorage.getItem("token");
-        this.roleId = parseInt(localStorage.getItem("roleId") || '0');
+        this.roleId = parseInt(JSON.parse(localStorage.getItem("userInfor") || '{"role_id": "0"}').role_id || '0');
     }
 }
 

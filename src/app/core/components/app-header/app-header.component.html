@@ -10,14 +10,14 @@
       }
       @else {
       <div class="header-avtar-container">
-        <p-avatar (click)="menu.toggle($event)">
-          <div class="header-avtar-icon">
-            <span class="pi pi-user"></span>
+        <div (click)="menu.toggle($event)" class="avatar-name-wrapper">
+            <div class="header-avtar-icon">
+              <span class="pi pi-user"></span>
+            </div>
+          <div class="header-avtar-name">
+            <p class="userName">{{userName}}</p>
           </div>
-          <span class="userName">{{userName}}</span>
-
-          <div class="header-avtar-name"></div>
-        </p-avatar>
+        </div>
         <p-menu #menu [model]="itemsMenuAvatar" [popup]="true"></p-menu>
       </div>
       }

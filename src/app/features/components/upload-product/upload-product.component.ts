@@ -14,6 +14,7 @@ import { CategoriesDto } from '../../../core/dtos/categories.dto';
 import { ProductService } from '../../../core/services/product.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { ToastModule } from 'primeng/toast';
+import { LoadingService } from '../../../core/services/loading.service';
 
 
 @Component({
@@ -48,7 +49,8 @@ export class UploadProductComponent extends BaseComponent implements OnInit {
     private categoriesService: CategoriesService,
     private productService: ProductService,
     private readonly messageService: MessageService,
-    private toastService : ToastService,
+    private toastService: ToastService,
+    private loadingService: LoadingService
   ) {
     super();
     this.productForm = this.fb.group({
@@ -72,7 +74,14 @@ export class UploadProductComponent extends BaseComponent implements OnInit {
   }
 
   onUpload(event: any){
+    this.loadingService.setLoading(true);
+  
+  setTimeout(() => {
     this.myFiles = event.files;
+    setTimeout(() => {
+      this.loadingService.setLoading(false);
+    }, 0);
+  }, 2000);
   }
 
   onCategoryChange(event: any){
@@ -85,7 +94,7 @@ export class UploadProductComponent extends BaseComponent implements OnInit {
       formData.append('files', file, file.name);
     });
     
-    if (this.productForm.valid && this.myFiles && this.categoryId){
+    if (this.productForm.valid && this.myFiles.length > 0 && this.categoryId){
       this.productService.uploadProduct({
         name: this.productForm.value.productName,
         price: this.productForm.value.price,

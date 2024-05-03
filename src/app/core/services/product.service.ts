@@ -113,4 +113,12 @@ export class ProductService {
       })
     })
   }
+
+  updateProduct(product: ProductUploadReq, id: number){
+    return this.httpClient.put<{message: string}>(`${this.apiUrl}products/${id}`, product, {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${this.token}`
+      })
+    })
+  }
 }
