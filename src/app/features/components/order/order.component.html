@@ -76,7 +76,11 @@
                         </li>
                     }
                 </ul>
-                <button (click)="order()" class="order-button">Đặt hàng</button>
+                @if(selectedPayMethod.key == 'Cash'){
+                    <button (click)="order()" class="order-button">Đặt hàng</button>
+                } @else {
+                    <ngx-paypal [config]="payPalConfig"></ngx-paypal>
+                }
             </div> 
         </div>
     </div>
